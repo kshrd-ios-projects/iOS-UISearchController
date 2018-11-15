@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController, UISearchResultsUpdating {
     
-    // Properties
+    // MARK: Properties
     var models = [Model]()
     var filteredModels = [Model]()
     let search = UISearchController(searchResultsController: nil)
@@ -19,29 +19,35 @@ class ViewController: UIViewController, UISearchResultsUpdating {
     
     
     func initSearch() {
+        // MARK: When Using UISearchBarDelegate
 //        search.searchBar.scopeButtonTitles = ["Friends", "Everyone"]
 //        search.searchBar.delegate = self
+//        search.searchBar.showsScopeBar = true
         
         search.searchResultsUpdater = self
-        search.obscuresBackgroundDuringPresentation = false
+        search.obscuresBackgroundDuringPresentation = true
+//        search.dimsBackgroundDuringPresentation = false
         search.searchBar.placeholder = "Type something here to search"
         definesPresentationContext = true
+        //search.hidesNavigationBarDuringPresentation = false
+        navigationItem.hidesSearchBarWhenScrolling = false
+//        tableView.tableHeaderView = search.searchBar
         navigationItem.searchController = search
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if #available(iOS 11.0, *) {
-            navigationItem.hidesSearchBarWhenScrolling = false
-        }
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if #available(iOS 11.0, *) {
-            navigationItem.hidesSearchBarWhenScrolling = true
-        }
-    }
+    // MARK: Check Verion of iOS
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        if #available(iOS 11.0, *) {
+//            navigationItem.hidesSearchBarWhenScrolling = false
+//        }
+//    }
+//
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//        if #available(iOS 11.0, *) {
+//            navigationItem.hidesSearchBarWhenScrolling = true
+//        }
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,20 +78,20 @@ class ViewController: UIViewController, UISearchResultsUpdating {
         filterRowsForSearchedText(term)
     }
     
-//    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-//        print("Scope Slected => \(selectedScope)")
-//    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        print("Cancel")
-    }
-    
     func filterRowsForSearchedText(_ searchText: String) {
-        filteredModels = models.filter({( model : Model) -> Bool in
+        filteredModels = models.filter({ ( model : Model) -> Bool in
             return model.movie.lowercased().contains(searchText.lowercased())||model.genre.lowercased().contains(searchText.lowercased())
         })
         tableView.reloadData()
     }
+    
+    //    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+    //        print("Scope Slected => \(selectedScope)")
+    //    }
+    
+    //    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+    //        print("Cancel")
+    //    }
 }
 
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
